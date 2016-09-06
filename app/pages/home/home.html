@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Home</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding class="home">
+  <h2>Welcome to CitiPirates!</h2>
+  <button (click)="takePicture()">Take a Picture</button>
+
+  <div id="picture-frame">
+    <img [src]="base64Image" *ngIf="base64Image" />
+
+    <ion-list *ngIf="showForm === true">
+      <ion-item>
+        <ion-label primary floating>Comment:</ion-label>
+        <ion-input type="text" [(ngModel)]="comment"></ion-input>
+      </ion-item>
+    </ion-list>
+
+  </div>
+
+  <div #map id="map"></div>
+
+</ion-content>

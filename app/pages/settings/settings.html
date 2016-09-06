@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Account Settings
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+      <ion-list-header>Authentication</ion-list-header>
+      <ion-item>
+        <ion-label primary floating>Email Address:</ion-label>
+        <ion-input type="email" [(ngModel)]="email"></ion-input>
+      </ion-item>
+  </ion-list>
+
+  <ion-list *ngIf="showDetails">
+      <ion-list-header>Your Details</ion-list-header>
+      <ion-item>
+        <ion-label primary floating>First Name:</ion-label>
+        <ion-input type="text" [(ngModel)]="first_name"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label primary floating>Family Name:</ion-label>
+        <ion-input type="text" [(ngModel)]="last_name"></ion-input>
+      </ion-item>
+  </ion-list>
+</ion-content>

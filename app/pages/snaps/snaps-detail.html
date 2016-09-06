@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      {{report.display_severity}} / <small>{{report.date_modified}}</small>
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding class="snap-detail">
+
+  <ion-avatar item-left>
+    <img src="{{report.thumbnail}}" border="0" />
+  </ion-avatar>
+
+  <p [innerHTML]="report.comment"></p>
+
+  <img src="{{report.photo}}" border="0" />
+
+  <div #map id="map"></div>
+
+</ion-content>
