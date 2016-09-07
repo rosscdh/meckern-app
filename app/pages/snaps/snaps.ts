@@ -118,16 +118,19 @@ export class SnapCreatePage {
 
       this.coordinates = params.get('coordinates');
       this.base64Image = params.get('base64Image');
+      this.report_type = 1;
+      this.severity = 0;
       this.report = {
         'lat': null,
         'lon': null,
         'photo': null,
         'title': null,
         'comment': null,
-        'report_type': null,
-        'severity': null,
+        'report_type': this.report_type,
+        'severity': this.severity,
         'photo_is_public': true,
       }
+
 
       this.loadSnapDetailPageMap();
   }
@@ -145,17 +148,17 @@ export class SnapCreatePage {
   }
 
   submitReport() {
-    this.report = {
-      'email': 'sendrossemail@gmail.com',
-      'lat': this.coordinates.lat,
-      'lon': this.coordinates.lon,
-      'photo': this.base64Image,
-      'title': this.title,
-      'comment': this.comment,
-      'report_type': this.report_type,
-      'severity': this.severity,
-      'photo_is_public': true
-    }
+
+    this.report.email = 'sendrossemail@gmail.com';
+    this.report.lat = this.coordinates.lat;
+    this.report.lon = this.coordinates.lon;
+    this.report.photo = this.base64Image;
+    this.report.title = this.title;
+    this.report.comment = this.comment;
+    this.report.report_type = this.report_type;
+    this.report.severity = this.severity;
+    this.report.photo_is_public = true;
+
     this.reportService.create(this.report).then(data => {
       this.report = data;
       this.navigateToDetail(this.report.id);

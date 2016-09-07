@@ -16,11 +16,18 @@
       <ion-list-header>Snap Detail</ion-list-header>
       <ion-item>
         <ion-label primary floating>I'd like to report:</ion-label>
-        <ion-input type="text" [(ngModel)]="report_type"></ion-input>
+        <ion-select [(ngModel)]="report_type">
+          <ion-option value="0">Damage</ion-option>
+          <ion-option value="1">Improvement Suggestion</ion-option>
+        </ion-select>
       </ion-item>
       <ion-item>
         <ion-label primary floating>How bad is it:</ion-label>
-        <ion-input type="text" [(ngModel)]="severity"></ion-input>
+        <ion-select [(ngModel)]="severity">
+          <ion-option value="2">Critical</ion-option>
+          <ion-option value="1">Bad</ion-option>
+          <ion-option value="0">Irritating</ion-option>
+        </ion-select>
       </ion-item>
       <ion-list-header>Overview</ion-list-header>
       <ion-item>
@@ -35,7 +42,6 @@
         <button (click)="submitReport()">Send</button>
       </ion-item>
   </ion-list>
-
 
   <div #map id="map"></div>
 
