@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Create Snapshot<br/><small>Take an image of and report snapshot</small>
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding class="snap-detail">
+
+  <ion-avatar item-left>
+    <img src="{{base64Image}}" border="0" />
+  </ion-avatar>
+
+  <ion-list>
+      <ion-list-header>Snap Detail</ion-list-header>
+      <ion-item>
+        <ion-label primary floating>I'd like to report:</ion-label>
+        <ion-input type="text" [(ngModel)]="report_type"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label primary floating>How bad is it:</ion-label>
+        <ion-input type="text" [(ngModel)]="severity"></ion-input>
+      </ion-item>
+      <ion-list-header>Overview</ion-list-header>
+      <ion-item>
+        <ion-label primary floating>Short Summary:</ion-label>
+        <ion-input type="text" [(ngModel)]="title"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label primary floating>Comment:</ion-label>
+        <ion-input type="text" [(ngModel)]="comment"></ion-input>
+      </ion-item>
+      <ion-item>
+        <button (click)="submitReport()">Send</button>
+      </ion-item>
+  </ion-list>
+
+
+  <div #map id="map"></div>
+
+</ion-content>

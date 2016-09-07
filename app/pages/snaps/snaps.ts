@@ -78,10 +78,76 @@ export class SnapDetailPage {
   loadSnapDetailPageMap() {
       var self = this;
       console.log('map')
-      this.mapsService.loadMap(this.mapElement, self.report.lat, self.report.lon).then((map) => {
+      this.mapsService.loadMap(this.mapElement,
+                               self.report.lat,
+                               self.report.lon).then((map) => {
         self.map = map;
         self.mapsService.addMarker(self.map, self.report);
       });
 
   }
+}
+
+
+/*
+* SnapDetailPage
+* Shows a snap objects details
+*
+*/
+@Component({
+  templateUrl: 'build/pages/snaps/snaps-create.html',
+  providers: [ReportService,
+              MapsService]
+})
+export class SnapCreatePage {
+  @ViewChild('map') mapElement: ElementRef;
+  map: any;
+
+  public report: any;
+  public coordinates: any;
+  public base64Image: number;
+  public title: string;
+  public comment: string;
+  public report_type: number;
+  public severity: number;
+
+  constructor(private navCtrl: NavController,
+              public params: NavParams,
+              public reportService: ReportService,
+              public mapsService: MapsService) {
+
+      this.coordinates = params.get('coordinates');
+      this.base64Image = params.get('base64Image');
+      this.report = {
+        'lat': this.coordinates.lat,
+        'lon': this.coordinates.lon,
+        'photo': this.base64Image,
+        'title': this.title,
+        'comment': this.comment,
+        'report_type': this.report_type,
+        'severity': this.severity,
+        'photo_is_public': true
+      }
+
+      this.loadSnapDetailPageMap();
+  }
+
+  loadSnapDetailPageMap() {
+      var self = this;
+      console.log('map')
+      this.mapsService.loadMap(this.mapElement,
+                               self.coordinates.lat,
+                               self.coordinates.lon).then((map) => {
+        self.map = map;
+
+        self.mapsService.addMarker(self.map, self.report);
+      });
+  }
+
+  submitReport() {
+    this.reportService.create(this.report).then(data => {
+      this.report = data;
+    });
+  }
+
 }

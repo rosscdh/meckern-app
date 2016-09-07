@@ -110,9 +110,13 @@ export class ReportService {
     }
 
     create(data) {
-        return this.http.post(reportsURL, data)
+      return new Promise(resolve => {
+          this.http.post(reportsURL, data)
             .map(res => res.json())
-            //.catch(this.handleError);
+            .subscribe(data => {
+              resolve(data);
+          });
+      });
     }
  
  
