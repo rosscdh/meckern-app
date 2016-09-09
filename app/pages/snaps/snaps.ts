@@ -1,6 +1,8 @@
 import {Component, ViewChild, ElementRef} from '@angular/core';
-import {NavController, NavParams} from 'ionic-angular';
+import {LoadingController, NavController, NavParams, List, Item} from 'ionic-angular';
 import {Observable} from 'rxjs/Rx';
+
+import {SettingsPage} from '../settings/settings';
 
 import {ReportService} from '../../providers/report-service/report-service';
 import {SettingsService} from '../../providers/settings-service/settings-service';
@@ -8,26 +10,47 @@ import {MapsService} from '../../providers/maps-service/maps-service';
 
 
 @Component({
+    selector: 'my-component',
+    templateUrl: 'build/pages/snaps/_partial/snap.html',
+    directives: [List, Item]
+})
+export class MyComponent {
+    constructor() {
+
+    }
+}
+
+@Component({
   templateUrl: 'build/pages/snaps/snaps-list.html',
   providers: [ReportService,
               SettingsService]
 })
-export class SnapsPage {
-  public reports: any;
-  public detailPage: any;
+export class MySnapsPage {
+  private reports: any;
+  private detailPage: any;
+  private loading: any;
 
   constructor(private navCtrl: NavController,
+              private loadingCtrl: LoadingController,
               public reportService: ReportService,
               public settingsService: SettingsService) {
+
+      this.loading = this.loadingCtrl.create({
+        dismissOnPageChange: true,
+        content: 'Loading...'
+      });
 
       this.detailPage = SnapDetailPage;
       this.loadReports();
   }
 
     loadReports(){
-      this.reportService.findMy(this.settingsService.email)
-      .then(data => {
-        this.reports = data;
+      this.loading.present();
+      this.settingsService.account().then(data => {
+        this.reportService.findMy(data['email']).then(data => {
+          this.loading.dismiss();
+          this.reports = data;
+        });
       });
     }
 
@@ -36,6 +59,90 @@ export class SnapsPage {
         pk: pk
       })
     }
+}
+
+@Component({
+  templateUrl: 'build/pages/snaps/snaps-around-me.html',
+  providers: [ReportService,
+              SettingsService,
+              MapsService]
+})
+export class SnapsAroundMePage {
+  @ViewChild('map') mapElement: ElementRef;
+
+  private map: any;
+  private reports: any;
+  private coordinates: any;
+  private loading: any;
+
+  constructor(private navCtrl: NavController,
+              private loadingCtrl: LoadingController,
+              private reportService: ReportService,
+              private mapsService: MapsService) {
+
+      this.loading = this.loadingCtrl.create({
+        dismissOnPageChange: true,
+        content: 'Loading Geography...'
+      });
+
+      // Defaults
+      this.coordinates = {
+        'lat': 51.0718316,
+        'lon': 6.4505703,
+      };
+
+      this.loadHomepageMap();
+  }
+
+  loadHomepageMap() {
+      var self = this;
+
+      this.loading.present();
+
+      this.mapsService.getCurrentGeoLocation().then((data) => {
+
+        this.loading.dismiss();
+
+        self.coordinates = data;
+
+        this.mapsService.loadMap(this.mapElement,
+                                 self.coordinates.lat,
+                                 self.coordinates.lon).then((map) => {
+          self.map = map;
+          this.loadReports(self.map, self.coordinates.lat, self.coordinates.lon);
+        });
+
+      });
+  }
+
+  loadReports(map, lat=null, lon=null){
+    var self = this;
+
+    if (lat !== null && lon !== null) {
+
+      this.reportService.findByGeoLocation(50000, lat, lon).then(
+          data => {
+            self.reports = data;
+            for (var i in data) {
+                var item = data[i];
+                this.mapsService.addMarker(map, item);
+            };
+          }
+      );
+
+    }else{
+      // no lat or long
+      this.reportService.findAll().then(
+          data => {
+            self.reports = data;
+            for (var i in data) {
+                var item = data[i];
+                this.mapsService.addMarker(self.map, item);
+            };
+          }
+      );
+    }
+  }
 
 }
 
@@ -97,7 +204,8 @@ export class SnapDetailPage {
 @Component({
   templateUrl: 'build/pages/snaps/snaps-create.html',
   providers: [ReportService,
-              MapsService]
+              MapsService,
+              SettingsService]
 })
 export class SnapCreatePage {
   @ViewChild('map') mapElement: ElementRef;
@@ -110,11 +218,13 @@ export class SnapCreatePage {
   public comment: string;
   public report_type: number;
   public severity: number;
+  public email: string;
 
   constructor(private navCtrl: NavController,
-              public params: NavParams,
-              public reportService: ReportService,
-              public mapsService: MapsService) {
+              private params: NavParams,
+              private reportService: ReportService,
+              private mapsService: MapsService,
+              private settingsService: SettingsService) {
 
       this.coordinates = params.get('coordinates');
       this.base64Image = params.get('base64Image');
@@ -130,9 +240,17 @@ export class SnapCreatePage {
         'severity': this.severity,
         'photo_is_public': true,
       }
+      this.email = null;
 
-
-      this.loadSnapDetailPageMap();
+    this.settingsService.account().then(data => {
+      console.log(data);
+      if (data == null || data['email'] == null || data['email'] == '') {
+        this.navCtrl.push(SettingsPage);
+      } else {
+        this.email = data['email'];
+        this.loadSnapDetailPageMap();
+      }
+    });
   }
 
   loadSnapDetailPageMap() {
@@ -149,20 +267,21 @@ export class SnapCreatePage {
 
   submitReport() {
 
-    this.report.email = 'sendrossemail@gmail.com';
-    this.report.lat = this.coordinates.lat;
-    this.report.lon = this.coordinates.lon;
-    this.report.photo = this.base64Image;
-    this.report.title = this.title;
-    this.report.comment = this.comment;
-    this.report.report_type = this.report_type;
-    this.report.severity = this.severity;
-    this.report.photo_is_public = true;
+      this.report.email = this.email;
+      this.report.lat = this.coordinates.lat;
+      this.report.lon = this.coordinates.lon;
+      this.report.photo = this.base64Image;
+      this.report.title = this.title;
+      this.report.comment = this.comment;
+      this.report.report_type = this.report_type;
+      this.report.severity = this.severity;
+      this.report.photo_is_public = true;
 
-    this.reportService.create(this.report).then(data => {
-      this.report = data;
-      this.navigateToDetail(this.report.id);
-    });
+      this.reportService.create(this.report).then(data => {
+        this.report = data;
+        this.navigateToDetail(this.report.id);
+      });
+
   }
 
   navigateToDetail (pk) {

@@ -5,19 +5,19 @@
 </ion-header>
 
 <ion-content padding class="home">
- 
-  <ion-list>
-    <ion-item>
-      <button *ngIf="showUsePictureButton === false" (click)="takePicture()">Take Picture</button>
-      <button *ngIf="showUsePictureButton === true" (click)="clearPicture()">Retake Picture</button>
-      <button *ngIf="showUsePictureButton === true" (click)="usePicture()">Use Picture</button>
-    </ion-item>
+
+  <ion-list id="picture-frame" no-lines>
+    
+      <img [src]="base64Image" *ngIf="base64Image" />
+    
   </ion-list>
 
-  <div id="picture-frame">
-    <img [src]="base64Image" *ngIf="base64Image" />
-  </div>
-
-  <div #map id="map"></div>
+  <ion-list no-lines>
+    <ion-item>
+      <button large primary block *ngIf="showUsePictureButton === false" (click)="takePicture()">Take Picture</button>
+      <button large secondary block *ngIf="showUsePictureButton === true" (click)="usePicture()">Use</button>
+      <button danger block *ngIf="showUsePictureButton === true" (click)="clearPicture()">Retake</button>
+    </ion-item>
+  </ion-list>
 
 </ion-content>

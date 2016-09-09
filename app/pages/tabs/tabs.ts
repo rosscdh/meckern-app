@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {HomePage} from '../home/home';
-import {SnapsPage} from '../snaps/snaps';
+import {MySnapsPage, SnapsAroundMePage} from '../snaps/snaps';
 import {SettingsPage} from '../settings/settings';
 
 @Component({
@@ -8,15 +8,14 @@ import {SettingsPage} from '../settings/settings';
 })
 export class TabsPage {
 
-  private tab1Root: any;
-  private tab2Root: any;
-  private tab3Root: any;
+  private tabs_list: any;
 
   constructor() {
     // this tells the tabs component which Pages
     // should be each tab's root Page
-    this.tab1Root = HomePage;
-    this.tab2Root = SnapsPage;
-    this.tab3Root = SettingsPage;
+    this.tabs_list = [{'page': HomePage, 'title': 'Snap', 'icon': 'aperture'},
+                      {'page': SnapsAroundMePage, 'title': 'Snaps Around Me', 'icon': 'md-map'},
+                      {'page': MySnapsPage, 'title': 'My Snaps', 'icon': 'microphone'},
+                      {'page': SettingsPage, 'title': 'Settings', 'icon': 'settings'}];
   }
 }
