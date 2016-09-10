@@ -7,16 +7,17 @@
 <ion-content padding class="home">
 
   <ion-list id="picture-frame" no-lines>
-    
+    <ion-item *ngIf="base64Image">
       <img [src]="base64Image" *ngIf="base64Image" />
-    
+    </ion-item>
+    <ion-item *ngIf="!base64Image">
+      <h1><b>NB!</b> Please enable Location Services</h1>
+    </ion-item>
   </ion-list>
 
   <ion-list no-lines>
     <ion-item>
-      <button large primary block *ngIf="showUsePictureButton === false" (click)="takePicture()">Take Picture</button>
-      <button large secondary block *ngIf="showUsePictureButton === true" (click)="usePicture()">Use</button>
-      <button danger block *ngIf="showUsePictureButton === true" (click)="clearPicture()">Retake</button>
+      <button large primary block (click)="takePicture()">Take Picture</button>
     </ion-item>
   </ion-list>
 

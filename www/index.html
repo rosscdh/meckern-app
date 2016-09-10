@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Ionic</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src *; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src  'self' 'unsafe-inline' *">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="format-detection" content="telephone=no">
   <meta name="msapplication-tap-highlight" content="no">
@@ -16,7 +17,8 @@
   <!-- This is Ionic's root component, where the app will load -->
   <ion-app></ion-app>
 
-  <script async defer src="http://maps.google.com/maps/api/js?key=AIzaSyBHZHVk0y82dU6daol2sIRXv6s6KZje-UU&sensor=true"></script>
+  <!-- <script async defer src="http://maps.google.com/maps/api/js?key=AIzaSyBHZHVk0y82dU6daol2sIRXv6s6KZje-UU&sensor=true"></script> -->
+  <script src="http://maps.google.com/maps/api/js"></script>
 
   <!-- cordova.js required for cordova apps -->
   <script src="cordova.js"></script>

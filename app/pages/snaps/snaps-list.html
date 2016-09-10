@@ -8,15 +8,19 @@
 
 <ion-content padding class="snaps">
 
-    <ion-list>
-        <ion-item *ngFor="let item of reports">
-          <ion-avatar item-left>
-            <img src="{{item.thumbnail||item.photo}}" border="0" />
-          </ion-avatar>
-          <h2><small>{{item.date_modified}}</small><br/>{{item.display_severity}}</h2>
-          <p [innerHTML]="item.comment"></p>
-          <button (click)="navigateToDetail(item.id)">View</button>
-        </ion-item>
-    </ion-list>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-list>
+      <ion-item *ngFor="let item of reports">
+        <ion-avatar item-left>
+          <img src="{{item.thumbnail||item.photo}}" border="0" />
+        </ion-avatar>
+        <h2><small>{{item.date_modified}}</small><br/>{{item.display_severity}}</h2>
+        <p [innerHTML]="item.comment"></p>
+        <button (click)="navigateToDetail(item.id)">View</button>
+      </ion-item>
+  </ion-list>
 
 </ion-content>

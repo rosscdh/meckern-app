@@ -10,58 +10,6 @@ import {MapsService} from '../../providers/maps-service/maps-service';
 
 
 @Component({
-    selector: 'my-component',
-    templateUrl: 'build/pages/snaps/_partial/snap.html',
-    directives: [List, Item]
-})
-export class MyComponent {
-    constructor() {
-
-    }
-}
-
-@Component({
-  templateUrl: 'build/pages/snaps/snaps-list.html',
-  providers: [ReportService,
-              SettingsService]
-})
-export class MySnapsPage {
-  private reports: any;
-  private detailPage: any;
-  private loading: any;
-
-  constructor(private navCtrl: NavController,
-              private loadingCtrl: LoadingController,
-              public reportService: ReportService,
-              public settingsService: SettingsService) {
-
-      this.loading = this.loadingCtrl.create({
-        dismissOnPageChange: true,
-        content: 'Loading...'
-      });
-
-      this.detailPage = SnapDetailPage;
-      this.loadReports();
-  }
-
-    loadReports(){
-      this.loading.present();
-      this.settingsService.account().then(data => {
-        this.reportService.findMy(data['email']).then(data => {
-          this.loading.dismiss();
-          this.reports = data;
-        });
-      });
-    }
-
-    navigateToDetail (pk) {
-      this.navCtrl.push(this.detailPage, {
-        pk: pk
-      })
-    }
-}
-
-@Component({
   templateUrl: 'build/pages/snaps/snaps-around-me.html',
   providers: [ReportService,
               SettingsService,
@@ -115,6 +63,11 @@ export class SnapsAroundMePage {
       });
   }
 
+  doRefresh() {
+    var self = this;
+    this.loadReports(self.map, self.coordinates.lat, self.coordinates.lon);
+  }
+
   loadReports(map, lat=null, lon=null){
     var self = this;
 
@@ -144,6 +97,47 @@ export class SnapsAroundMePage {
     }
   }
 
+}
+
+@Component({
+  templateUrl: 'build/pages/snaps/snaps-list.html',
+  providers: [ReportService,
+              SettingsService]
+})
+export class MySnapsPage {
+  private reports: any;
+  private detailPage: any;
+  private loading: any;
+
+  constructor(private navCtrl: NavController,
+              private loadingCtrl: LoadingController,
+              public reportService: ReportService,
+              public settingsService: SettingsService) {
+
+      this.loading = this.loadingCtrl.create({
+        dismissOnPageChange: true,
+        content: 'Loading...'
+      });
+
+      this.detailPage = SnapDetailPage;
+      this.loadReports();
+  }
+
+    loadReports(){
+      this.loading.present();
+      this.settingsService.account().then(data => {
+        this.reportService.findMy(data['email']).then(data => {
+          this.loading.dismiss();
+          this.reports = data;
+        });
+      });
+    }
+
+    navigateToDetail (pk) {
+      this.navCtrl.push(this.detailPage, {
+        pk: pk
+      })
+    }
 }
 
 
