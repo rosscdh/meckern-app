@@ -21,6 +21,8 @@
         <p [innerHTML]="item.comment"></p>
         <button (click)="navigateToDetail(item.id)">View</button>
       </ion-item>
+      <button large primary *ngIf="previous" (click)="goPrevious(previous)">Previous</button>
+      <button large primary *ngIf="next" (click)="goNext(next)">Next</button>
   </ion-list>
 
 </ion-content>

@@ -11,7 +11,7 @@ import 'rxjs/add/operator/map';
   for more info on providers and Angular 2 DI.
 */
 let data = [],
-    SERVER_URL = 'https://712f0f33.ngrok.io',
+    SERVER_URL = 'http://localhost:8003',
     reportsURL = SERVER_URL + '/api/v1/report/';
 
 @Injectable()
@@ -47,15 +47,13 @@ export class ReportService {
       });
     }
 
-    findMy(email) {
-      // if (this.data) {
-      //   // already loaded data
-      //   return Promise.resolve(this.data);
-      // }
+    findMy(email, uri=null) {
+      // handle pagination
+      uri = uri || reportsURL + 'my/'+ email +'/';
 
       // don't have the data yet
       return new Promise(resolve => {
-        this.http.get(reportsURL + 'my/'+ email +'/')
+        this.http.get(uri)
           .map(res => res.json())
           //.catch(this.handleError)
           .subscribe(data => {

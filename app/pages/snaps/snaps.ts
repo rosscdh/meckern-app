@@ -107,28 +107,35 @@ export class SnapsAroundMePage {
 export class MySnapsPage {
   private reports: any;
   private detailPage: any;
-  private loading: any;
+
+  private next: any;
+  private previous: any;
 
   constructor(private navCtrl: NavController,
               private loadingCtrl: LoadingController,
               public reportService: ReportService,
               public settingsService: SettingsService) {
 
-      this.loading = this.loadingCtrl.create({
-        dismissOnPageChange: true,
-        content: 'Loading...'
-      });
-
       this.detailPage = SnapDetailPage;
       this.loadReports();
   }
 
-    loadReports(){
-      this.loading.present();
+    loadReports (uri=null) {
+      var loading = this.loadingCtrl.create({
+        dismissOnPageChange: true,
+        content: 'Loading...'
+      });
+      if (uri === null){
+        loading.present();  
+      }
+      
+
       this.settingsService.account().then(data => {
-        this.reportService.findMy(data['email']).then(data => {
-          this.loading.dismiss();
+        this.reportService.findMy(data['email'], uri).then(data => {
+          if (uri === null) loading.dismiss();
           this.reports = data;
+          this.next = this.reportService.next;
+          this.previous = this.reportService.previous;
         });
       });
     }
@@ -137,6 +144,12 @@ export class MySnapsPage {
       this.navCtrl.push(this.detailPage, {
         pk: pk
       })
+    }
+    goPrevious (uri) {
+      this.loadReports(uri);
+    }
+    goNext (uri) {
+      this.loadReports(uri);
     }
 }
 

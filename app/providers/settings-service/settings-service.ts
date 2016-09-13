@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import { Storage, SqlStorage, ToastController } from 'ionic-angular';
+import { Storage, SqlStorage } from 'ionic-angular';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
@@ -8,7 +8,7 @@ import 'rxjs/add/operator/map';
 let STORAGE = new Storage(SqlStorage);
 
 let data = [],
-    SERVER_URL = 'https://712f0f33.ngrok.io',
+    SERVER_URL = 'http://localhost:8003',
     tokenURL = SERVER_URL + '/api/v1/token/',
     accountSettingsURL = SERVER_URL + '/api/v1/account/';
 
@@ -22,17 +22,8 @@ export class SettingsService {
   public email: string;
   public first_name: string;
   public last_name: string;
-
-  private toast: any;
   
-  constructor(private http: Http,
-              private toastCtrl: ToastController) {
-
-      this.toast = this.toastCtrl.create({
-        message: null,
-        duration: 3000,
-        position: 'top'
-      });
+  constructor(private http: Http) {
 
       this.http = http;
       this.showDetails = false;
@@ -66,8 +57,6 @@ export class SettingsService {
   saveAccount(data) {
     return new Promise(resolve => {
       var stringify_data = JSON.stringify(data);
-      this.toast.message = 'User Saved';
-      this.toast.present();
       STORAGE.set('account', stringify_data);
       resolve(data);
     });

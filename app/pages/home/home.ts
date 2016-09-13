@@ -52,13 +52,13 @@ export class HomePage {
 
       Camera.getPicture({
           destinationType: Camera.DestinationType.DATA_URL,
-          targetWidth: 1000,
-          targetHeight: 1000
+          targetWidth: 640,
+          targetHeight: 480
       }).then((imageData) => {
-        // imageData is a base64 encoded string
-          this.base64Image = "data:image/jpeg;base64," + imageData;
-
           this.loading.present();
+
+          // imageData is a base64 encoded string
+          this.base64Image = "data:image/jpeg;base64," + imageData;
 
           this.mapsService.getCurrentGeoLocation().then((coordinates) => {
             this.navCtrl.push(SnapCreatePage, {

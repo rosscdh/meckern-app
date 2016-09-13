@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {REACTIVE_FORM_DIRECTIVES, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Events, NavController} from 'ionic-angular';
+import {Events, NavController, ToastController} from 'ionic-angular';
 import {TabsPage} from '../tabs/tabs';
 
 import {SettingsService} from '../../providers/settings-service/settings-service';
@@ -20,7 +20,8 @@ export class SettingsPage {
   constructor(private navCtrl: NavController,
               private formBuilder: FormBuilder,
               private settingsService: SettingsService,
-              private events: Events) {
+              private events: Events,
+              private toastCtrl: ToastController) {
 
     this.loadAccountSettings()
     this.data = {};
@@ -46,9 +47,16 @@ export class SettingsPage {
     this.submitAttempt = true;
     
     if(formData.valid){
+        var toast = this.toastCtrl.create({
+          message: 'Successfully Saved User',
+          duration: 3000,
+          position: 'top'
+        });
         console.log('success submit')
         this.settingsService.saveAccount(formData.value).then((data) => {
-          self.events.publish('user.login', data);
+          toast.present();
+          console.log('show toast')
+          //self.events.publish('user.login', data);
         });
         
     }
