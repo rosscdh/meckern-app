@@ -1,5 +1,5 @@
 import {Component, ViewChild, ElementRef} from '@angular/core';
-import {NavController, LoadingController} from 'ionic-angular';
+import {Events, NavController, LoadingController} from 'ionic-angular';
 import {Observable} from 'rxjs/Observable';
 
 import { Camera } from 'ionic-native';
@@ -21,14 +21,20 @@ export class HomePage {
 
     public reports: any;
 
-    public base64Image: string;
+    private base64Image: string;
 
     private loading: any;
 
     constructor(private navCtrl: NavController,
                 private loadingCtrl: LoadingController,
                 private reportService: ReportService,
+                private events: Events,
                 private mapsService: MapsService) {
+
+      events.subscribe('home.reset_base64Image', () => {
+        this.base64Image = null;
+      });
+
     }
 
     ionViewLoaded(){

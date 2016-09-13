@@ -11,7 +11,7 @@ import 'rxjs/add/operator/map';
   for more info on providers and Angular 2 DI.
 */
 let data = [],
-    SERVER_URL = 'https://0441810e.ngrok.io',
+    SERVER_URL = 'https://712f0f33.ngrok.io',
     reportsURL = SERVER_URL + '/api/v1/report/';
 
 @Injectable()

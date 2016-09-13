@@ -8,7 +8,7 @@ import 'rxjs/add/operator/map';
 let STORAGE = new Storage(SqlStorage);
 
 let data = [],
-    SERVER_URL = 'https://0441810e.ngrok.io',
+    SERVER_URL = 'https://712f0f33.ngrok.io',
     tokenURL = SERVER_URL + '/api/v1/token/',
     accountSettingsURL = SERVER_URL + '/api/v1/account/';
 

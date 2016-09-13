@@ -1,5 +1,5 @@
 import {Component, ViewChild, ElementRef} from '@angular/core';
-import {LoadingController, NavController, NavParams, List, Item} from 'ionic-angular';
+import {LoadingController, Events, NavController, NavParams, List, Item} from 'ionic-angular';
 import {Observable} from 'rxjs/Rx';
 
 import {SettingsPage} from '../settings/settings';
@@ -216,6 +216,7 @@ export class SnapCreatePage {
 
   constructor(private navCtrl: NavController,
               private params: NavParams,
+              private events: Events,
               private reportService: ReportService,
               private mapsService: MapsService,
               private settingsService: SettingsService) {
@@ -260,7 +261,7 @@ export class SnapCreatePage {
   }
 
   submitReport() {
-
+      var self = this;
       this.report.email = this.email;
       this.report.lat = this.coordinates.lat;
       this.report.lon = this.coordinates.lon;
@@ -273,6 +274,8 @@ export class SnapCreatePage {
 
       this.reportService.create(this.report).then(data => {
         this.report = data;
+        // reset the base64Image
+        self.events.publish('home.reset_base64Image');
         this.navigateToDetail(this.report.id);
       });
 
