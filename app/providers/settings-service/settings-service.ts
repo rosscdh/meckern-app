@@ -8,7 +8,7 @@ import 'rxjs/add/operator/map';
 let STORAGE = new Storage(SqlStorage);
 
 let data = [],
-    SERVER_URL = 'http://localhost:8003',
+    SERVER_URL = 'http://46.101.128.117',
     tokenURL = SERVER_URL + '/api/v1/token/',
     accountSettingsURL = SERVER_URL + '/api/v1/account/';
 
